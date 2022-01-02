@@ -1,6 +1,6 @@
 # Simple-Image-Classification
 ## Simple Image Classification Code (PyTorch)
-[Yechan Kim*](https://github.com/unique-chan) and [Junggyun Oh*](https://github.com/Dodant)
+[Yechan Kim*](https://github.com/unique-chan)
 
 ### This repository contains:
 - Python3 / Pytorch code for multi-class image classification
@@ -75,7 +75,7 @@ python test.py --network_name='resnet34_for_tiny' --dataset_dir='./cifar10_dummy
 
 
 ### Contribution
-🐛 If you find any bugs or have opinions for further improvements, feel free to contact us (yechankim@gm.gist.ac.kr or maestr.oh@gm.gist.ac.kr). All contributions are welcome.
+🐛 If you find any bugs or have opinions for further improvements, feel free to contact me (yechankim@gm.gist.ac.kr). All contributions are welcome.
 
 
 ### Reference

@@ -28,4 +28,4 @@ class CCE(nn.Module):
         complement_entropy /= float(batch_size)
         complement_entropy /= float(yHat.shape[1])
 
-        return cross_entropy #- self.balancing_factor * complement_entropy
+        return cross_entropy - self.balancing_factor * complement_entropy

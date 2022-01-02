@@ -1,0 +1,12 @@
+torch
+torchvision
+matplotlib
+scikit-learn
+tqdm            # not mandatory but recommended
+tensorboard     # not mandatory but recommended
+# Ubuntu 20.04, 64bit, Cuda 11.2, Nvidia RTX-3090
+# pip install torch==1.7.1+cu110 torchvision==0.8.2+cu110 -f https://download.pytorch.org/whl/torch_stable.html
+# pip install matplotlib==3.5.0
+# pip install scikit-learn==1.0.2
+# pip install tqdm==4.62.3
+# pip install tensorboard==2.7.0

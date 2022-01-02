@@ -80,5 +80,5 @@ python test.py --network_name='resnet34_for_tiny' --dataset_dir='./cifar10_dummy
 
 ### Reference
 1. https://github.com/weiaicunzai/pytorch-cifar100
-2. https://github.com/peterliht/knowledge-distillation-pytorch
-3. https://medium.com/@djin31/how-to-plot-wholesome-confusion-matrix-40134fd402a8 (Confusion Matrix)
+2. https://medium.com/@djin31/how-to-plot-wholesome-confusion-matrix-40134fd402a8 (Confusion Matrix)
+3. https://pytorch.org/ignite/generated/ignite.handlers.param_scheduler.create_lr_scheduler_with_warmup.html

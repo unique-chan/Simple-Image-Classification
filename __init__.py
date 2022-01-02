@@ -44,7 +44,7 @@ def get_lr_scheduler(optimizer, lr_step, lr_step_gamma):
     return optim.lr_scheduler.MultiStepLR(optimizer, milestones=lr_step, gamma=lr_step_gamma)
 
 
-def get_loss_function(loss_function_name):
+def get_loss_function(loss_function_name, device):
     if loss_function_name is None:
         return None
     if loss_function_name == 'CE':  # default

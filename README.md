@@ -26,7 +26,7 @@ tensorboard     # not mandatory but recommended
 |—— 📁 your_own_dataset
 	|—— 📁 train
 		|—— 📁 class_1
-			|—— 🖼️ 1.jpg
+			|—— 🖼️ 1.jpg (Available file extensions: *.jpeg, *.jpg, *.png, *.bmp) 
 			|—— ...
 		|—— 📁 class_2 
 			|—— 🖼️ ...

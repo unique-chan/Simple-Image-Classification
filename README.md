@@ -1,6 +1,6 @@
 # Simple-Image-Classification
 ### Simple Image Classification Code (PyTorch)
-[Yechan Kim](https://github.com/unique-chan)
+[Yechan Kim](https://github.com/unique-chan) and [Junggyun Oh](https://github.com/Dodant)
 
 ## This repository contains:
 - Python3 / Pytorch code for multi-class image classification

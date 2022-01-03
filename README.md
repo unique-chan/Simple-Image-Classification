@@ -1,12 +1,12 @@
 # Simple-Image-Classification
-## Simple Image Classification Code (PyTorch)
+### Simple Image Classification Code (PyTorch)
 [Yechan Kim](https://github.com/unique-chan)
 
-### This repository contains:
+## This repository contains:
 - Python3 / Pytorch code for multi-class image classification
 
 
-### Prerequisites
+## Prerequisites
 - See `requirements.txt` for details.
 ~~~ME
 torch
@@ -18,7 +18,7 @@ tensorboard     # not mandatory but recommended
 ~~~
 
 
-### How to use
+## How to use
 1. The directory structure of your dataset should be as follows. (You can use our toy-examples: unzip `cifar10_dummy.zip`.)
 ~~~
 |—— 📁 your_own_dataset
@@ -66,7 +66,7 @@ python test.py --network_name='resnet34_for_tiny' --dataset_dir='./cifar10_dummy
 --checkpoint='pretrained_model_weights.pt'
 ~~~
 
-### Trailer
+## Trailer
 1. If you install tqdm, you can check the progress of training.
 ![readme1](readme/readme_1.png)
 
@@ -74,11 +74,11 @@ python test.py --network_name='resnet34_for_tiny' --dataset_dir='./cifar10_dummy
 ![readme1](readme/readme_2.png)
 
 
-### Contribution
+## Contribution
 🐛 If you find any bugs or have opinions for further improvements, feel free to contact me (yechankim@gm.gist.ac.kr). All contributions are welcome.
 
 
-### Reference
+## Reference
 1. https://github.com/weiaicunzai/pytorch-cifar100
 2. https://medium.com/@djin31/how-to-plot-wholesome-confusion-matrix-40134fd402a8 (Confusion Matrix)
 3. https://pytorch.org/ignite/generated/ignite.handlers.param_scheduler.create_lr_scheduler_with_warmup.html

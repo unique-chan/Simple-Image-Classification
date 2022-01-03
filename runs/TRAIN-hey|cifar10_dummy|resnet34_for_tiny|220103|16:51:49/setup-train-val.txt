@@ -1,0 +1,17 @@
+auto_mean_std: True 
+batch_size: 256 
+dataset_dir: ./cifar10_dummy 
+epochs: 5 
+gpu_index: 0 
+loss_function: your_own_function_name 
+lr: 0.1 
+lr_step: [60, 120, 160] 
+lr_step_gamma: 0.5 
+lr_warmup_epochs: 5 
+network_name: resnet34_for_tiny 
+store_confusion_matrix: True 
+store_logits: True 
+store_loss_acc_log: True 
+store_weights: True 
+tag: hey 
+transform_list_name: CIFAR 

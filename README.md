@@ -72,7 +72,7 @@ python test.py --network_name='resnet34_for_tiny' --dataset_dir='./cifar10_dummy
 1. If you install tqdm, you can check the progress of training.
 ![readme1](readme/readme_1.png)
 
-2. If you install tensorboard, you can check the acc/loss changes and confusion matrices during training. (Type `tensorboard --logdir='./runs'` in your command shell.)
+2. If you install tensorboard, you can see the plots of acc/loss changes and confusion matrices during training. (Type `tensorboard --logdir='./runs'` in your command shell.)
 ![readme1](readme/readme_2.png)
 
 

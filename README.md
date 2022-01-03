@@ -63,14 +63,14 @@ python train.py --network_name='resnet34_for_tiny' --dataset_dir='./cifar10_dumm
 ~~~ME
 python test.py --network_name='resnet34_for_tiny' --dataset_dir='./cifar10_dummy' \
 --auto_mean_std --store_logits --store_confusion_matrix \
---checkpoint='pretrained_model_weights.pt'
+--checkpoint='your_pretrained_model_weights.pt'
 ~~~
 
 ## Trailer
 1. If you install tqdm, you can check the progress of training.
 ![readme1](readme/readme_1.png)
 
-2. If you install tensorboard, you can check the acc/loss changes and confusion matrices during training.
+2. If you install tensorboard, you can check the acc/loss changes and confusion matrices during training. (Type `tensorboard --logdir='./runs'` in your command shell.)
 ![readme1](readme/readme_2.png)
 
 

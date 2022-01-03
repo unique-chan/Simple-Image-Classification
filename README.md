@@ -61,7 +61,7 @@ python train.py --network_name='resnet34_for_tiny' --dataset_dir='./cifar10_dumm
 ~~~
 
 
-4. Run **`test.py`** for test. The below is an example. See **src/my_utils/parser.py** for details.
+4. Run **`test.py`** for test. The below is an example. See **`src/my_utils/parser.py`** for details.
 ~~~ME
 python test.py --network_name='resnet34_for_tiny' --dataset_dir='./cifar10_dummy' \
 --auto_mean_std --store_logits --store_confusion_matrix \

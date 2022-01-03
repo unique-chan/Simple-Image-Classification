@@ -1,9 +1,0 @@
-auto_mean_std: True 
-batch_size: 128 
-checkpoint: train-001|cifar10_dummy|resnet34_for_tiny|220103|16:05:52_valid_best.pt 
-dataset_dir: cifar10_dummy 
-gpu_index: 0 
-network_name: resnet34_for_tiny 
-store_confusion_matrix: True 
-store_logits: True 
-transform_list_name:  

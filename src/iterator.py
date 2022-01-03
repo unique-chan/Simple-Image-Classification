@@ -47,25 +47,25 @@ class Iterator:
         self.tag_name = tag_name
         self.best_valid_acc_state = {'top1_acc': 0, 'top5_acc': 0}
         if store_weights or store_loss_acc_log or store_logits:
-            os.makedirs(f'{LOG_DIR}/{tag_name}', exist_ok=True)
+            os.makedirs(f'{RUN_DIR}/{tag_name}', exist_ok=True)
         if store_weights:
             # [GOAL] store the best validation model during training.
-            self.best_model_state_path = f'{LOG_DIR}/{tag_name}/{tag_name}_valid_best.pt'
+            self.best_model_state_path = f'{RUN_DIR}/{tag_name}/{tag_name}.pt'
             self.best_model_state_dict = None
         if store_loss_acc_log:
             # [GOAL] store train/valid loss & acc per each epoch during training.
             self.loss_acc_state = {field_name: 0 for field_name in LOSS_ACC_STATE_FIELDS}
-            self.log_loss_acc_csv_path = f'{LOG_DIR}/{tag_name}/{tag_name}.csv'
+            self.log_loss_acc_csv_path = f'{RUN_DIR}/{tag_name}/{tag_name}.csv'
             self.log_loss_acc_csv_writer = csv.DictWriter(open(self.log_loss_acc_csv_path, 'w', newline=NEWLINE),
                                                           fieldnames=LOSS_ACC_STATE_FIELDS)
             self.log_loss_acc_csv_writer.writeheader()
         if store_logits:
             # [GOAL] store output distributions per each epoch for all images in the current experiment.
-            self.logits_root_path = f'{LOG_DIR}/{self.tag_name}/logits'
+            self.logits_root_path = f'{RUN_DIR}/{self.tag_name}/logits'
             self.logits_csv_writers = {}  # key: 'img_path' - value: csv_writer for corresponding key
         if store_confusion_matrix:
             # [Goal] store confusion matrix if so far best during validation
-            self.confusion_matrix_root_path = f'{LOG_DIR}/{self.tag_name}/cf_matrix'
+            self.confusion_matrix_root_path = f'{RUN_DIR}/{self.tag_name}/cf_matrix'
             os.makedirs(self.confusion_matrix_root_path, exist_ok=True)
         self.tb_writer = SummaryWriter(f'{RUN_DIR}/{self.tag_name}') if bool_tb else None
 
@@ -151,6 +151,11 @@ class Iterator:
             self.__write_csv_logits(mode, -1, img_paths, y_preds, y_dists)
         if self.store_confusion_matrix:
             self.__write_confusion_matrix(mode, -1, y_preds, y_trues)
+        if self.tb_writer:
+            self.tb_writer.add_scalar(f'{mode.upper()} Top1 Acc', top1_acc, 0)
+            self.tb_writer.add_scalar(f'{mode.upper()} Top5 Acc', top5_acc, 0)
+
+
 
     def store_model(self):
         torch.save(self.best_model_state_dict, self.best_model_state_path)
@@ -218,9 +223,9 @@ class Iterator:
         self.loss_acc_state[f'{mode}_top1_acc'] = top1_acc
         self.loss_acc_state[f'{mode}_top5_acc'] = top5_acc
         if self.tb_writer:
-            self.tb_writer.add_scalar(f'{mode}-loss', loss, epoch)
-            self.tb_writer.add_scalar(f'{mode}-top1-acc', top1_acc, epoch)
-            self.tb_writer.add_scalar(f'{mode}-top5-acc', top5_acc, epoch)
+            self.tb_writer.add_scalar(f'{mode.upper()} Loss', loss, epoch)
+            self.tb_writer.add_scalar(f'{mode.upper()} Top1 Acc', top1_acc, epoch)
+            self.tb_writer.add_scalar(f'{mode.upper()} Top5 Acc', top5_acc, epoch)
 
     def __write_csv_log_loss_acc(self):
         with open(self.log_loss_acc_csv_path, 'a') as f:
@@ -254,10 +259,10 @@ class Iterator:
         plot_cf_matrix = util.create_confusion_matrix(y_trues, y_preds,
                                                       num_of_classes=len(class_names),
                                                       class_names=class_names,
-                                                      title=f"best-val "
+                                                      title=f"best-{mode} "
                                                             f"[top1] {self.best_valid_acc_state['top1_acc']: .2f}% "
                                                             f"[top5] {self.best_valid_acc_state['top5_acc']: .2f}%")
-        if self.tb_writer and mode != 'test':
-            self.tb_writer.add_figure('Confusion Matrix', plot_cf_matrix, cur_epoch)
+        if self.tb_writer:
+            self.tb_writer.add_figure(f'{mode.upper()} Confusion Matrix', plot_cf_matrix, cur_epoch)
         file_name = f'{mode}-epoch-{cur_epoch}.svg' if cur_epoch > -1 else f'{mode}.svg'
         plot_cf_matrix.savefig(f'{self.confusion_matrix_root_path}/{file_name}', dpi=600)

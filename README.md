@@ -5,7 +5,7 @@
 ## This repository contains:
 - Python3 / Pytorch code for multi-class image classification
 - Tensorboard code for logger
-- Scikit-learn code for confusion-matrix
+- Scikit-learn code for confusion matrix
 
 
 ## Prerequisites

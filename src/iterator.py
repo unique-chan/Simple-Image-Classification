@@ -51,7 +51,7 @@ class Iterator:
         if store_weights:
             # [GOAL] store the best validation model during training.
             self.best_model_state_path = f'{LOG_DIR}/{tag_name}/{tag_name}_valid_best.pt'
-            self.best_model_state_dict = self.model.state_dict()
+            self.best_model_state_dict = None
         if store_loss_acc_log:
             # [GOAL] store train/valid loss & acc per each epoch during training.
             self.loss_acc_state = {field_name: 0 for field_name in LOSS_ACC_STATE_FIELDS}
@@ -98,9 +98,8 @@ class Iterator:
             if self.store_logits or self.store_confusion_matrix:
                 Iterator.__accumulate_predictions(img_path, img_paths, y, y_dist, y_dists, y_pred, y_preds, y_trues)
             # to print the log!
-            if self.store_loss_acc_log:
-                Iterator.__update_all_meters(loss if mode in ['train', 'valid'] else None,
-                                             meter, top1_acc, top5_acc, k=y_dist.size(0))
+            Iterator.__update_all_meters(loss if mode in ['train', 'valid'] else None,
+                                         meter, top1_acc, top5_acc, k=y_dist.size(0))
             if bool_tqdm:
                 self.__print_tqdm_log(cur_epoch, meter, mode, tqdm_loader)
         return meter['loss'].avg, meter['top1_acc'].avg * 100., meter['top5_acc'].avg * 100., \
@@ -128,7 +127,8 @@ class Iterator:
         is_best_valid = self.__update_best_valid_acc_state(top1_acc, top5_acc)
         # for logging ->
         if self.store_weights:
-            self.best_model_state_dict = self.model.state_dict()
+            if is_best_valid:
+                self.best_model_state_dict = self.model.state_dict()
         if self.store_loss_acc_log:
             self.__update_loss_acc_state(mode, cur_epoch, loss, top1_acc, top5_acc)
             self.__write_csv_log_loss_acc()

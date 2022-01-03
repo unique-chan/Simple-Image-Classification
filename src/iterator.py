@@ -116,10 +116,6 @@ class Iterator:
         # for logging ->
         if self.store_loss_acc_log:
             self.__update_loss_acc_state(mode, cur_epoch, loss, top1_acc, top5_acc)
-            if self.tb_writer:
-                self.tb_writer.add_scalar('train-loss', loss, cur_epoch)
-                self.tb_writer.add_scalar('train-top1-acc', top1_acc, cur_epoch)
-                self.tb_writer.add_scalar('train-top5-acc', top5_acc, cur_epoch)
         if self.store_logits:
             self.__write_csv_logits(mode, cur_epoch, img_paths, y_preds, y_dists)
 
@@ -136,10 +132,6 @@ class Iterator:
         if self.store_loss_acc_log:
             self.__update_loss_acc_state(mode, cur_epoch, loss, top1_acc, top5_acc)
             self.__write_csv_log_loss_acc()
-            if self.tb_writer:
-                self.tb_writer.add_scalar('valid-loss', loss, cur_epoch)
-                self.tb_writer.add_scalar('valid-top1-acc', top1_acc, cur_epoch)
-                self.tb_writer.add_scalar('valid-top5-acc', top5_acc, cur_epoch)
         if self.store_logits:
             self.__write_csv_logits(mode, cur_epoch, img_paths, y_preds, y_dists)
         if self.store_confusion_matrix:
@@ -224,6 +216,10 @@ class Iterator:
         self.loss_acc_state[f'{mode}_loss'] = loss
         self.loss_acc_state[f'{mode}_top1_acc'] = top1_acc
         self.loss_acc_state[f'{mode}_top5_acc'] = top5_acc
+        if self.tb_writer:
+            self.tb_writer.add_scalar(f'{mode}-loss', loss, epoch)
+            self.tb_writer.add_scalar(f'{mode}-top1-acc', top1_acc, epoch)
+            self.tb_writer.add_scalar(f'{mode}-top5-acc', top5_acc, epoch)
 
     def __write_csv_log_loss_acc(self):
         with open(self.log_loss_acc_csv_path, 'a') as f:

@@ -36,7 +36,7 @@ tensorboard     # not mandatory but recommended
 		|—— 📁 ... 
 ~~~
 
-2. Check **__init__.py**. You might need to modify variables and add somethings (transformation, optimizer, lr_schduler ...).
+2. Check **`__init__.py`**. You might need to modify variables and add somethings (transformation, optimizer, lr_schduler ...).
 💁 `Tip` You can add your own loss function as follows: 
 ```python
 ...
@@ -48,7 +48,7 @@ def get_loss_function(loss_function_name, device):
 ...
 ```
 
-3. Run **train.py** for training. The below is an example. See **src/my_utils/parser.py** for details.
+3. Run **`train.py`** for training. The below is an example. See **`src/my_utils/parser.py`** for details.
 💁 `Tip` `--loss_function='CE'` means that you choose softmax-cross-entropy (default) for your loss.
 ~~~ME
 python train.py --network_name='resnet34_for_tiny' --dataset_dir='./cifar10_dummy' \
@@ -59,7 +59,7 @@ python train.py --network_name='resnet34_for_tiny' --dataset_dir='./cifar10_dumm
 ~~~
 
 
-4. Run **test.py** for test. The below is an example. See **src/my_utils/parser.py** for details.
+4. Run **`test.py`** for test. The below is an example. See **src/my_utils/parser.py** for details.
 ~~~ME
 python test.py --network_name='resnet34_for_tiny' --dataset_dir='./cifar10_dummy' \
 --auto_mean_std --store_logits --store_confusion_matrix \

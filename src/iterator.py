@@ -34,8 +34,8 @@ class Iterator:
         self.optimizer = optimizer
         self.loader = {'train': None, 'valid': None, 'test': None}
         self.lr_scheduler = lr_scheduler
-        self.lr_warmup_epochs = lr_warmup_epochs
-        self.lr_warmup_scheduler = warmup_schduler.WarmUpLR(optimizer) if lr_warmup_epochs > 0 else None
+        self.lr_warmup_epochs = lr_warmup_epochs if lr_warmup_epochs else 0
+        self.lr_warmup_scheduler = warmup_schduler.WarmUpLR(optimizer) if self.lr_warmup_epochs > 0 else None
         self.num_classes = num_classes
         self.device = device  # 'cpu', 'cuda:0', ...
         self.model.to(device)

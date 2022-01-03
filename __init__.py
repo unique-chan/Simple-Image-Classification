@@ -7,8 +7,7 @@ import torch.nn as nn
 
 sys.path.append('src')  # Do not remove this code!
 
-LOG_DIR = 'logs'  # directory name for storing *.pt & *.csv.
-RUN_DIR = 'runs'  # directory name for storing log info on tensorboard.
+RUN_DIR = 'runs'  # directory name for storing *.pt & *.csv. & storing log info on tensorboard.
 # (DO NOT INSERT '/' AT THE END OF LINE)
 
 NEWLINE = '\n' if system == 'Windows' else ''  # Recommendation: (for win) '\n' (for linux) ''

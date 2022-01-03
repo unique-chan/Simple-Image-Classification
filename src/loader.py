@@ -14,16 +14,13 @@ class Loader:
     mean_pkl, std_pkl = 'mean.pkl', 'std.pkl'
 
     def __init__(self, dataset_path, batch_size=1,
-                 mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225),
-                 auto_mean_std=False,
-                 transform_list_name='',
-                 num_workers=2):
+                 mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), auto_mean_std=False,
+                 transform_list_name='', num_workers=2):
         self.dataset_path = dataset_path
         self.dataset_dir = self.__get_dataset_dir()
         self.classes = self.__get_classes()
         self.num_classes = len(self.classes)
-        self.batch_size = batch_size
-        self.num_workers = num_workers
+        self.batch_size, self.num_workers = batch_size, num_workers
         self.mean = ast.literal_eval(mean) if type(mean) == str else mean
         self.std = ast.literal_eval(std) if type(std) == str else std
         if auto_mean_std:
@@ -45,8 +42,7 @@ class Loader:
         return dataset_dir
 
     def __get_classes(self):
-        return [class_dir for class_dir in os.listdir(self.dataset_dir['train'])
-                if not os.path.isfile(class_dir)]
+        return [class_dir for class_dir in os.listdir(self.dataset_dir['train']) if not os.path.isfile(class_dir)]
 
     def __get_train_mean_std(self):
         Loader.mean_pkl, Loader.std_pkl = os.path.join(self.dataset_path, Loader.mean_pkl), \

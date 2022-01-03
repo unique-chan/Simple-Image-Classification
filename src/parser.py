@@ -4,10 +4,8 @@ import argparse
 class Parser:
     def __init__(self, mode):
         self.parser = argparse.ArgumentParser(description='Pytorch Image Classification (github.com/unique-chan)')
-        if mode == 'train':
-            self.add_arguments_for_train()
-        elif mode == 'test':
-            self.add_arguments_for_test()
+        if mode == 'train': self.add_arguments_for_train()
+        elif mode == 'test': self.add_arguments_for_test()
         self.add_default_arguments()
 
     def add_default_arguments(self):

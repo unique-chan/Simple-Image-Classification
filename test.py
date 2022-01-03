@@ -23,8 +23,8 @@ if __name__ == '__main__':
     my_args = my_parser.parser.parse_args()
 
     # Tag
-    cur_time = datetime.datetime.now().strftime('%y-%m-%d-%H-%M-%S')
-    tag_name = f'TEST_{os.path.basename(my_args.checkpoint)}_{os.path.basename(my_args.dataset_dir)}_{cur_time}'  # ⭐
+    cur_time = datetime.datetime.now().strftime('%y%m%d|%H:%M:%S')
+    tag_name = f'TEST-{os.path.basename(my_args.checkpoint)[6:-3]}-{cur_time}'  # ⭐
     print(f'{tag_name} experiment has been started.')
 
     # Loader (Train / Valid)
@@ -49,6 +49,6 @@ if __name__ == '__main__':
     # Test
     my_iterator.test()  # ⭐⭐⭐
 
-    util.store_setup_txt(f'{LOG_DIR}/{tag_name}/setup-test.txt', my_args)
+    util.store_setup_txt(f'{RUN_DIR}/{tag_name}/setup-test.txt', my_args)
 
     print(f'{tag_name} experiment has been done.')

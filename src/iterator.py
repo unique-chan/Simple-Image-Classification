@@ -97,9 +97,10 @@ class Iterator:
             # to store logits or confusion matrix, accumulate the prediction results!
             if self.store_logits or self.store_confusion_matrix:
                 Iterator.__accumulate_predictions(img_path, img_paths, y, y_dist, y_dists, y_pred, y_preds, y_trues)
-            # to print the log!
+            # acc/loss accumulation
             Iterator.__update_all_meters(loss if mode in ['train', 'valid'] else None,
                                          meter, top1_acc, top5_acc, k=y_dist.size(0))
+            # to print the log!
             if bool_tqdm:
                 self.__print_tqdm_log(cur_epoch, meter, mode, tqdm_loader)
         return meter['loss'].avg, meter['top1_acc'].avg * 100., meter['top5_acc'].avg * 100., \

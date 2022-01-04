@@ -5,7 +5,8 @@
 ## This repository contains:
 - Python3 / Pytorch code for multi-class image classification
    - You can obtain **logits for all images** during training and test (`--store_logits`) and **confusion matrix** (`--store_confusion_matrix`) if necessary. 
-   - You can manage your experiments with this code.
+   - You can manage your experiments with this code. This code helps to store loss/accuracy changes during training (`--store_loss_acc_log`). Also, you can access the best weights files during validation (`--store_weights`). 
+   - You do not need to calcuate mean/std of training examples: use `--auto_mean_std`.
    - You can check the progress of training with **tensorboard**.
 
 

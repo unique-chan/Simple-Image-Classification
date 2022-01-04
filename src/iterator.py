@@ -243,14 +243,16 @@ class Iterator:
             if not os.path.isdir(root_path):
                 os.makedirs(root_path, exist_ok=True)
                 csv_writer = csv.DictWriter(open(csv_path, 'w', newline=NEWLINE),
-                                            fieldnames=['epoch', 'output_distribution', 'classification_result'])
+                                            fieldnames=['epoch', 'output_distribution',
+                                                        'classification_result', 'ground_truth'])
                 csv_writer.writeheader()
                 self.logits_csv_writers[f'{mode}/{class_name}/{file_name}'] = csv_writer
             with open(csv_path, 'a') as f:
                 self.logits_csv_writers[f'{mode}/{class_name}/{file_name}'].writerow({
                     'epoch': cur_epoch,
                     'output_distribution': output_distribution,
-                    'classification_result': classification_result
+                    'classification_result': classification_result,
+                    'ground_truth': self.loader[mode].dataset.class_names.index(class_name)
                 })
                 f.flush()
 

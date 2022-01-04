@@ -60,7 +60,7 @@ class Iterator:
                                                           fieldnames=LOSS_ACC_STATE_FIELDS)
             self.log_loss_acc_csv_writer.writeheader()
         if store_logits:
-            # [GOAL] store output distributions per each epoch for all images in the current experiment.
+            # [GOAL] store output logits per each epoch for all images in the current experiment.
             self.logits_root_path = f'{RUN_DIR}/{self.tag_name}/logits'
             self.logits_csv_writers = {}  # key: 'img_path' - value: csv_writer for corresponding key
         if store_confusion_matrix:
@@ -82,34 +82,34 @@ class Iterator:
         img_paths = []  # set of image(x) paths
         y_trues = []  # set of ground_truth
         y_preds = []  # set of prediction (classification result)
-        y_dists = []  # set of predicted distribution
+        y_logits = []  # set of predicted distribution (strictly speaking, logits in general)
         for (img_path, x, y) in tqdm_loader:
             x, y = x.to(self.device), y.to(self.device)
             # predict
-            y_dist = self.model(x)
+            y_logit = self.model(x)
             y_pred, [top1_acc, top5_acc] = \
-                Iterator.__get_final_classification_results_and_topk_acc__(y_dist, y, top_k=(1, 5))
+                Iterator.__get_final_classification_results_and_topk_acc__(y_logit, y, top_k=(1, 5))
             # calculate loss
             if mode in ['train', 'valid']:
-                loss = self.criterion(y_dist, y)
+                loss = self.criterion(y_logit, y)
                 if mode == 'train':
                     self.__optimize_model(cur_epoch, loss)
             # to store logits or confusion matrix, accumulate the prediction results!
             if self.store_logits or self.store_confusion_matrix:
-                Iterator.__accumulate_predictions(img_path, img_paths, y, y_dist, y_dists, y_pred, y_preds, y_trues)
+                Iterator.__accumulate_predictions(img_path, img_paths, y, y_logit, y_logits, y_pred, y_preds, y_trues)
             # acc/loss accumulation
             Iterator.__update_all_meters(loss if mode in ['train', 'valid'] else None,
-                                         meter, top1_acc, top5_acc, k=y_dist.size(0))
+                                         meter, top1_acc, top5_acc, k=y_logit.size(0))
             # to print the log!
             if bool_tqdm:
                 self.__print_tqdm_log(cur_epoch, meter, mode, tqdm_loader)
         return meter['loss'].avg, meter['top1_acc'].avg * 100., meter['top5_acc'].avg * 100., \
-               img_paths, y_trues, y_preds, y_dists
+               img_paths, y_trues, y_preds, y_logits
 
     def train(self, cur_epoch):
         mode = 'train'
         self.model.train()
-        loss, top1_acc, top5_acc, img_paths, y_trues, y_preds, y_dists = \
+        loss, top1_acc, top5_acc, img_paths, y_trues, y_preds, y_logits = \
             self.one_epoch(mode=mode, cur_epoch=cur_epoch)
         if self.lr_scheduler:
             self.lr_scheduler.step()
@@ -117,13 +117,13 @@ class Iterator:
         if self.store_loss_acc_log:
             self.__update_loss_acc_state(mode, cur_epoch, loss, top1_acc, top5_acc)
         if self.store_logits:
-            self.__write_csv_logits(mode, cur_epoch, img_paths, y_preds, y_dists)
+            self.__write_csv_logits(mode, cur_epoch, img_paths, y_preds, y_logits)
 
     def valid(self, cur_epoch):
         mode = 'valid'
         self.model.eval()
         with torch.no_grad():
-            loss, top1_acc, top5_acc, img_paths, y_trues, y_preds, y_dists = \
+            loss, top1_acc, top5_acc, img_paths, y_trues, y_preds, y_logits = \
                 self.one_epoch(mode=mode, cur_epoch=cur_epoch)
         is_best_valid = self.__update_best_valid_acc_state(top1_acc, top5_acc)
         # for logging ->
@@ -134,7 +134,7 @@ class Iterator:
             self.__update_loss_acc_state(mode, cur_epoch, loss, top1_acc, top5_acc)
             self.__write_csv_log_loss_acc()
         if self.store_logits:
-            self.__write_csv_logits(mode, cur_epoch, img_paths, y_preds, y_dists)
+            self.__write_csv_logits(mode, cur_epoch, img_paths, y_preds, y_logits)
         if self.store_confusion_matrix:
             if is_best_valid:
                 self.__write_confusion_matrix(mode, cur_epoch, y_preds, y_trues)
@@ -143,20 +143,19 @@ class Iterator:
         mode = 'test'
         self.model.eval()
         with torch.no_grad():
-            _, top1_acc, top5_acc, img_paths, y_trues, y_preds, y_dists = \
+            _, top1_acc, top5_acc, img_paths, y_trues, y_preds, y_logits = \
                 self.one_epoch(mode=mode, cur_epoch=-1)
         print(f'➜ top1_acc: {top1_acc: .2f}%, top5_acc: {top5_acc: .2f}%')
         # for logging ->
         if self.store_logits:
-            self.__write_csv_logits(mode, -1, img_paths, y_preds, y_dists)
+            self.__write_csv_logits(mode, -1, img_paths, y_preds, y_logits)
         if self.store_confusion_matrix:
             self.__write_confusion_matrix(mode, -1, y_preds, y_trues)
         if self.tb_writer:
             self.tb_writer.add_scalar(f'{mode.upper()} Top1 Acc', top1_acc, 0)
             self.tb_writer.add_scalar(f'{mode.upper()} Top5 Acc', top5_acc, 0)
 
-
-
+    # UTIL -> #
     def store_model(self):
         torch.save(self.best_model_state_dict, self.best_model_state_path)
 
@@ -170,11 +169,11 @@ class Iterator:
         return top_1_prediction, top_k_acc_list  # sum of correct predictions (top_1, top_k)
 
     @classmethod
-    def __accumulate_predictions(cls, img_path, img_paths, y, y_dist, y_dists, y_pred, y_preds, y_trues):
+    def __accumulate_predictions(cls, img_path, img_paths, y, y_logit, y_logits, y_pred, y_preds, y_trues):
         img_paths.extend(img_path)
         y_trues.extend(y.data.cpu().numpy())
         y_preds.extend(torch.flatten(y_pred).tolist())
-        y_dists.extend([logit.tolist() for logit in y_dist.cpu().detach().numpy()])
+        y_logits.extend([logit.tolist() for logit in y_logit.cpu().detach().numpy()])
 
     @classmethod
     def __update_all_meters(cls, loss, meter, top1_acc, top5_acc, k):
@@ -232,25 +231,25 @@ class Iterator:
             self.log_loss_acc_csv_writer.writerow(self.loss_acc_state)
             f.flush()
 
-    def __write_csv_logits(self, mode, cur_epoch, img_paths, classification_results, output_distributions):
-        # assert len(img_paths) == len(classification_results) == len(output_distributions)
-        zips = zip(img_paths, classification_results, output_distributions)
+    def __write_csv_logits(self, mode, cur_epoch, img_paths, classification_results, output_logits):
+        # assert len(img_paths) == len(classification_results) == len(output_logits)
+        zips = zip(img_paths, classification_results, output_logits)
         sep = os.sep  # '/': linux, '\': windows
-        for img_path, classification_result, output_distribution in zips:
+        for img_path, classification_result, output_logit in zips:
             class_name, file_name = img_path.split(sep)[-2], img_path.split(sep)[-1]
             root_path = f'{self.logits_root_path}/{mode}/{class_name}/{file_name}'
             csv_path = f'{root_path}/logits.csv'
             if not os.path.isdir(root_path):
                 os.makedirs(root_path, exist_ok=True)
                 csv_writer = csv.DictWriter(open(csv_path, 'w', newline=NEWLINE),
-                                            fieldnames=['epoch', 'output_distribution',
+                                            fieldnames=['epoch', 'output_logits',
                                                         'classification_result', 'ground_truth'])
                 csv_writer.writeheader()
                 self.logits_csv_writers[f'{mode}/{class_name}/{file_name}'] = csv_writer
             with open(csv_path, 'a') as f:
                 self.logits_csv_writers[f'{mode}/{class_name}/{file_name}'].writerow({
                     'epoch': cur_epoch,
-                    'output_distribution': output_distribution,
+                    'output_logits': output_logit,
                     'classification_result': classification_result,
                     'ground_truth': self.loader[mode].dataset.class_names.index(class_name)
                 })

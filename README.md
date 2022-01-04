@@ -6,9 +6,9 @@
 - Python3 / Pytorch code for multi-class image classification
    - You can obtain **logits for all images** (`--store_logits`) and **confusion matrix** (`--store_confusion_matrix`) of your current model.
    - You can manage your experiments with this code. This code helps to store loss/accuracy changes during training (`--store_loss_acc_log`). Also, you can access the best weights files during validation (`--store_weights`). 
-   - You do not need to calcuate mean/std of training examples: use `--auto_mean_std`.
+   - You can easily change loss function for training your model. (See below `tip`s!)
    - You can check the progress of training with **tensorboard**.
-
+   - You do not need to calcuate mean/std of training examples: use `--auto_mean_std`.
 
 ## Prerequisites
 - See `requirements.txt` for details.

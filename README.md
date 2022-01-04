@@ -1,5 +1,5 @@
 # Simple-Image-Classification
-### Simple Image Classification Code (PyTorch)
+### Simple Image Classification Code for Researchers (PyTorch)
 [Yechan Kim](https://github.com/unique-chan) and [Junggyun Oh](https://github.com/Dodant)
 
 ## This repository contains:
@@ -69,6 +69,8 @@ python test.py --network_name='resnet34_for_tiny' --dataset_dir='./cifar10_dummy
 --batch_size=256 --auto_mean_std --store_logits --store_confusion_matrix \
 --checkpoint='your_pretrained_model_weights.pt'
 ~~~
+
+5. You can add your own classification models. See **`src/my_models`** and **`src/model.py`** for details.
 
 ## Trailer
 1. If you install tqdm, you can check the progress of training.

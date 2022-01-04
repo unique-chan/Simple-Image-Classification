@@ -4,8 +4,9 @@
 
 ## This repository contains:
 - Python3 / Pytorch code for multi-class image classification
-- Tensorboard code for logger
-- Scikit-learn code for confusion matrix
+   - You can obtain **logits for all images** during training and test (`--store_logits`) and **confusion matrix** (`--store_confusion_matrix`) if necessary. 
+   - You can manage your experiments with this code.
+   - You can check the progress of training with **tensorboard**.
 
 
 ## Prerequisites

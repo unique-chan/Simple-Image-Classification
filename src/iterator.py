@@ -92,6 +92,7 @@ class Iterator:
             # calculate loss
             if mode in ['train', 'valid']:
                 loss = self.criterion(y_logit, y)
+                assert torch.isfinite(loss), "[Error] non-finite loss (nan) occurs."
                 if mode == 'train':
                     self.__optimize_model(cur_epoch, loss)
             # to store logits or confusion matrix, accumulate the prediction results!

@@ -15,8 +15,8 @@ if __name__ == '__main__':
     my_args = my_parser.parser.parse_args()
 
     # Tag
-    cur_time = datetime.datetime.now().strftime('%y%m%d|%H-%M-%S')
-    tag_name = f'TRAIN-[{my_args.tag}|{os.path.basename(my_args.dataset_dir)}|{my_args.network_name}]|{cur_time}'
+    cur_time = datetime.datetime.now().strftime('%y%m%d-%H_%M_%S')
+    tag_name = f'TRAIN-[{my_args.tag}-{os.path.basename(my_args.dataset_dir)}-{my_args.network_name}]-{cur_time}'
     print(f'{tag_name} experiment has been started.')
 
     # Loader (Train / Valid)

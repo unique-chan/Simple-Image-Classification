@@ -12,14 +12,14 @@ try:
     import tqdm
 except ImportError:
     bool_tqdm = False
-    print('[Warning] Try to install tqdm for progress bar.')
+    # print('[Warning] Try to install tqdm for progress bar.')
 
 try:
     bool_tb = True
     from torch.utils.tensorboard import SummaryWriter
 except ImportError:
     bool_tb = False
-    print('[Warning] Try to install tensorboard for checking the status of learning.')
+    # print('[Warning] Try to install tensorboard for checking the status of learning.')
 
 LOSS_ACC_STATE_FIELDS = ['epoch',
                          'train_loss', 'valid_loss',

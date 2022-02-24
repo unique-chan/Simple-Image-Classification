@@ -79,6 +79,20 @@ python test.py --network_name='resnet34_for_tiny' --dataset_dir='./cifar10_dummy
 2. If you install tensorboard, you can see the plots of acc/loss changes and confusion matrices during training. (Type `tensorboard --logdir='./runs'` in your command shell.)
 ![readme1](readme/readme_2.png)
 
+## Citation
+If you use this code for your research, please cite the following papers:
+~~~ME
+@article{kim2021imbalanced,
+  title={Imbalanced image classification with complement cross entropy},
+  author={Kim, Yechan and Lee, Younkwan and Jeon, Moongu},
+  journal={Pattern Recognition Letters},
+  volume={151},
+  pages={33--40},
+  year={2021},
+  publisher={Elsevier}
+}
+~~~
+
 
 ## Contribution
 🐛 If you find any bugs or have opinions for further improvements, feel free to contact me (yechankim@gm.gist.ac.kr). All contributions are welcome.
